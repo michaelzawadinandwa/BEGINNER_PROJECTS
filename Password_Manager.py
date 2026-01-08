@@ -1,19 +1,54 @@
-class PasswordManager :
-    import random 
-    import string
+import random
+import string
+
+class PasswordManager:
     def __init__(self, uppercase, lowercase, numbers, special_characters, length):
         self.uppercase = uppercase
         self.lowercase = lowercase
         self.numbers = numbers
         self.special_characters = special_characters
-        self.lenght = length
+        self.length = length
+
+
 class GeneratePassword(PasswordManager):
     def __init__(self, uppercase, lowercase, numbers, special_characters, length):
-        self.uppercase = uppercase(maximum_uppercase=1)
-        self.lowercase = lowercase
-        self.numbers = numbers(maximum_numbers=3)
-        self.special_characters = special_characters(maximum_characters=1)
-        self.lenght = length(maximum_characters=16)
-        input("welcome ,kindly provide the following details to generate a strong password for your account")
-        if length(password_length=16) < 8:
-            raise ValueError("password length must be at least 8 characters")
+        super().__init__(uppercase, lowercase, numbers, special_characters, length)
+
+        if self.length < 8:
+            raise ValueError("Password length must be at least 8")
+
+    def generate_password(self):
+        characters = ""
+
+        if self.uppercase:
+            characters += string.ascii_uppercase
+        if self.lowercase:
+            characters += string.ascii_lowercase
+        if self.numbers:
+            characters += string.digits
+        if self.special_characters:
+            characters += string.punctuation
+
+        password = "".join(random.choice(characters) for _ in range(self.length))
+        return password
+
+    def check_strength(self, password):
+        score = 0
+
+        if any(c.isupper() for c in password):
+            score += 1
+        if any(c.islower() for c in password):
+            score += 1
+        if any(c.isdigit() for c in password):
+            score += 1
+        if any(c in string.punctuation for c in password):
+            score += 1
+        if len(password) >= 12:
+            score += 1
+
+        if score <= 2:
+            return "this password is too weak. create another one"
+        elif score <= 4:
+            return "this password is of medium security"
+        else:
+            return "this password is strong and secure"
