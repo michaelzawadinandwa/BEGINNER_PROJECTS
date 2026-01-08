@@ -52,3 +52,21 @@ class GeneratePassword(PasswordManager):
             return "this password is of medium security"
         else:
             return "this password is strong and secure"
+if __name__ == "__main__":
+    pm = GeneratePassword(True, True, True, True, 16)
+    password = pm.generate_password()
+    print(password)
+if __name__ == "__main__":
+    print("Welcome, kindly provide details to generate a strong password")
+
+    pm = GeneratePassword(
+        uppercase=True,
+        lowercase=True,
+        numbers=True,
+        special_characters=True,
+        length=16
+    )
+
+    password = pm.generate_password()
+    print("Generated Password:", password)
+    print("Strength:", pm.check_strength(password))
